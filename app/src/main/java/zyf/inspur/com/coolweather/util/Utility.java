@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -103,6 +104,7 @@ public class Utility {
      * Date: 2016/8/29 10:29
      */
     public static void handleWeatherResponse(Context context, String response) {
+        LogUtil.log(LogUtil.TAG,"Utility handleWeatherResponse() response is\n"+response);
         try {
             JSONObject jsonObject = new JSONObject(response);
             JSONObject weatherInfo = jsonObject.getJSONObject("weatherinfo");
@@ -131,6 +133,7 @@ public class Utility {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy年M月d日", Locale.CHINA);
         SharedPreferences.Editor editor = PreferenceManager
                 .getDefaultSharedPreferences(context).edit();
+        LogUtil.log(LogUtil.TAG,"Utility saveWeatherInfo() cityName="+cityName+"temp1="+temp1,LogUtil.DEBUG);
         editor.putBoolean("city_selected", true);
         editor.putString("city_name", cityName);
         editor.putString("weather_code", weatherCode);
@@ -141,4 +144,5 @@ public class Utility {
         editor.putString("current_date", sdf.format(new Date()));
         editor.commit();
     }
+
 }

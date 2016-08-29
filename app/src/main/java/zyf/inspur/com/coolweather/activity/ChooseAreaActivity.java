@@ -83,13 +83,13 @@ public class ChooseAreaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 //        AdManager.getInstance(this).init("cf9c2a749cd97145","289874826c698edd", false);
 //        isFromWeatherActivity = getIntent().getBooleanExtra("from_weather_activity", false);
-//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-//        if (prefs.getBoolean("city_selected", false) && !isFromWeatherActivity) {
-//            Intent intent = new Intent(this, WeatherActivity.class);
-//            startActivity(intent);
-//            finish();
-//            return;
-//        }
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if (prefs.getBoolean("city_selected", false)) {
+            Intent intent = new Intent(this, WeatherActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
