@@ -9,6 +9,14 @@ public class City {
     private String cityCode;
     private int provinceId;
 
+    public String getCityCode() {
+        return cityCode;
+    }
+
+    public void setCityCode(String cityCode) {
+        this.cityCode = cityCode;
+    }
+
     public int getId() {
         return id;
     }
@@ -23,14 +31,6 @@ public class City {
 
     public void setCityName(String cityName) {
         this.cityName = cityName;
-    }
-
-    public String getCityCode() {
-        return cityCode;
-    }
-
-    public void setCityCode(String cityCode) {
-        this.cityCode = cityCode;
     }
 
     public int getProvinceId() {
