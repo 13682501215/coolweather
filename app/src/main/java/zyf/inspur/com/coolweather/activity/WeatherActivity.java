@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import zyf.inspur.com.coolweather.R;
 import zyf.inspur.com.coolweather.model.City;
+import zyf.inspur.com.coolweather.service.AutoUpdateService;
 import zyf.inspur.com.coolweather.util.HttpCallbackListener;
 import zyf.inspur.com.coolweather.util.HttpUtil;
 import zyf.inspur.com.coolweather.util.LogUtil;
@@ -81,6 +82,8 @@ public class WeatherActivity extends AppCompatActivity implements View.OnClickLi
         currentDateText.setText(preferences.getString("current_date", ""));
         weatherInfoLayout.setVisibility(View.VISIBLE);
         cityNameText.setVisibility(View.VISIBLE);
+        Intent intent=new Intent(this, AutoUpdateService.class);
+        startService(intent);
     }
 
     /**
