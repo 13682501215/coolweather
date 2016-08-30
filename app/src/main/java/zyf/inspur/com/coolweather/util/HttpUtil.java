@@ -1,5 +1,7 @@
 package zyf.inspur.com.coolweather.util;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -17,6 +19,7 @@ public class HttpUtil {
             public void run() {
                 HttpURLConnection connection = null;
                 try {
+                    LogUtil.log(LogUtil.TAG,"HttpUtil address:"+address,LogUtil.DEBUG);
                     URL url = new URL(address);
                     connection = (HttpURLConnection) url.openConnection();
                     connection.setRequestMethod("GET");
@@ -24,9 +27,10 @@ public class HttpUtil {
                     connection.setReadTimeout(8000);
                     InputStream in = connection.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-                    StringBuilder response = new StringBuilder();
-                    String line;
+                    StringBuffer response = new StringBuffer();
+                    String line="";
                     while ((line = reader.readLine()) != null) {
+                        LogUtil.log(LogUtil.TAG,"HttpUtil readline "+line,LogUtil.DEBUG);
                         response.append(line);
                     }
                     if (listener != null) {
@@ -34,6 +38,7 @@ public class HttpUtil {
                         listener.onFinish(response.toString());
                     }
                 } catch (Exception e) {
+                    e.printStackTrace();
                     if (listener != null) {
                         // 回调onError()方法
                         listener.onError(e);

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,7 +19,7 @@ import zyf.inspur.com.coolweather.util.HttpUtil;
 import zyf.inspur.com.coolweather.util.LogUtil;
 import zyf.inspur.com.coolweather.util.Utility;
 
-public class WeatherActivity extends AppCompatActivity {
+public class WeatherActivity extends AppCompatActivity implements View.OnClickListener {
 
     private LinearLayout weatherInfoLayout;
     private TextView cityNameText;
@@ -27,6 +28,8 @@ public class WeatherActivity extends AppCompatActivity {
     private TextView temp1Text;
     private TextView temp2Text;
     private TextView currentDateText;
+    private Button switchCity;
+    private Button refreshWeather;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,10 @@ public class WeatherActivity extends AppCompatActivity {
         temp1Text = (TextView) findViewById(R.id.temp1);
         temp2Text = (TextView) findViewById(R.id.temp2);
         currentDateText = (TextView) findViewById(R.id.current_date);
+        switchCity= (Button) findViewById(R.id.switch_city);
+        refreshWeather= (Button) findViewById(R.id.refresh_weather);
+        switchCity.setOnClickListener(this);
+        refreshWeather.setOnClickListener(this);
         String countyCode = getIntent().getStringExtra("county_code");
         LogUtil.log(LogUtil.TAG, "WeatherActivity onCreate() countyCode is " + countyCode, LogUtil.DEBUG);
         if (!TextUtils.isEmpty(countyCode)) {
@@ -94,11 +101,11 @@ public class WeatherActivity extends AppCompatActivity {
      * Date: 2016/8/29 16:31
      */
     private void queryFromServer(final String address, final String type) {
-        LogUtil.log(LogUtil.TAG,"WeatherActivity queryFromServer() address is:\n"+address+"\ntype is "+type);
+        LogUtil.log(LogUtil.TAG, "WeatherActivity queryFromServer() address is:\n" + address + "\ntype is " + type);
         HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
             @Override
             public void onFinish(String response) {
-                LogUtil.log(LogUtil.TAG,"WeatherActivity queryFromServer onFinish() type is "+type);
+                LogUtil.log(LogUtil.TAG, "WeatherActivity queryFromServer onFinish() type is " + type);
                 if ("countyCode".equals(type)) {
                     if (!TextUtils.isEmpty(type)) {
 //                       从服务器返回的数据中解析出天气代号
@@ -141,5 +148,27 @@ public class WeatherActivity extends AppCompatActivity {
     private void queryWeatherInfo(String weatherCode) {
         String address = "http://www.weather.com.cn/data/cityinfo/" + weatherCode + ".html";
         queryFromServer(address, "weatherCode");
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.switch_city:
+                Intent intent=new Intent(this,ChooseAreaActivity.class);
+                intent.putExtra("from_weather_activity",true);
+                startActivity(intent);
+                finish();
+                break;
+            case R.id.refresh_weather:
+                publishText.setText("同步中。。。");
+                SharedPreferences preferences=PreferenceManager.getDefaultSharedPreferences(this);
+                String weatherCode=preferences.getString("weather_code","");
+                if (!TextUtils.isEmpty(weatherCode)){
+                    queryWeatherInfo(weatherCode);
+                }
+                break;
+            default:
+                break;
+        }
     }
 }

@@ -82,9 +82,9 @@ public class ChooseAreaActivity extends AppCompatActivity {
         LogUtil.log(LogUtil.TAG,"ChooseAreaActivity onCreate()",LogUtil.DEBUG);
         super.onCreate(savedInstanceState);
 //        AdManager.getInstance(this).init("cf9c2a749cd97145","289874826c698edd", false);
-//        isFromWeatherActivity = getIntent().getBooleanExtra("from_weather_activity", false);
+        isFromWeatherActivity = getIntent().getBooleanExtra("from_weather_activity", false);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        if (prefs.getBoolean("city_selected", false)) {
+        if (prefs.getBoolean("city_selected", false)&&!isFromWeatherActivity) {
             Intent intent = new Intent(this, WeatherActivity.class);
             startActivity(intent);
             finish();
